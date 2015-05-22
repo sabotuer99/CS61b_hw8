@@ -48,7 +48,7 @@ public class UserListTests {
         assertEquals(sorted, list.toString()); 
     }
 
-/*    @Test
+    @Test
     public void naiveMakeQueuesTest(){
         UserList list = new UserList();
 
@@ -61,7 +61,7 @@ public class UserListTests {
         "[ [ User ID: 0, Pages Printed: 20 ],\n  [ User ID: 1, Pages Printed: 0 ],\n  [ User ID: 2, Pages Printed: 10 ] ]";
 
         assertEquals(queueOfQueues, queues.toString());        
-    }*/
+    }
 
     @Test
     public void naiveMergeQueuesTest(){

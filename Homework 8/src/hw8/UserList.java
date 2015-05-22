@@ -166,7 +166,14 @@ public class UserList {
     **/
     public CatenableQueue<CatenableQueue<User>> makeQueueOfQueues(){
         //Replace with solution.
-        return null;
+    	CatenableQueue<CatenableQueue<User>> qq = new CatenableQueue<CatenableQueue<User>>();
+    	while(userQueue.size() > 0){
+    		User user = userQueue.dequeue();
+    		CatenableQueue<User> userq = new CatenableQueue<User>();
+    		userq.enqueue(user);
+    		qq.enqueue(userq);
+    	}
+        return qq;
     }
 
     /**
@@ -182,8 +189,39 @@ public class UserList {
     *       sorted from smallest to largest by their sortFeature.
     **/
     public static CatenableQueue<User> mergeTwoQueues(String sortFeature, CatenableQueue<User> q1, CatenableQueue<User> q2){
-        //Replace with solution.
-        return null;
+        // if one queue is null, return the other
+    	// if both are null, will return null
+    	if(q1 == null || q1.size() == 0)
+    		return q2;
+    	if(q2 == null || q2.size() == 0)
+    		return q1;
+    	
+    	CatenableQueue<User> sortedq = new CatenableQueue<User>();
+    	
+    	while(q1.size() != 0 && q2.size() != 0){
+    		
+    		int q1val = getPivot(sortFeature, q1.nth(0));
+    		int q2val = getPivot(sortFeature, q2.nth(0));
+    		
+    		if(q1val <= q2val){
+    			sortedq.enqueue(q1.dequeue());
+    		} else {
+    			sortedq.enqueue(q2.dequeue());
+    		}
+    			  		
+    		// if one queue is empty and the other not, 
+    		// append the non empty queue
+    		if(q1.size() == 0 && q2.size() != 0){
+    			sortedq.append(q2);
+    		}
+    		
+    		if(q1.size() != 0 && q2.size() == 0){
+    			sortedq.append(q1);
+    		}
+    	}
+    	
+    	
+        return sortedq;
     }
 
     /**
@@ -194,7 +232,34 @@ public class UserList {
     *       printed, sortFeatures equals "pages".
     **/
     public void mergeSort(String sortFeature){
-        //Replace with solution.
+        if(size < 2)
+        	return;
+        
+        CatenableQueue<CatenableQueue<User>> qq = makeQueueOfQueues();
+        
+        while(qq.size() > 1){
+        	CatenableQueue<User> q1 = qq.dequeue();
+        	CatenableQueue<User> q2 = qq.dequeue();
+        	qq.enqueue(mergeTwoQueues(sortFeature, q1, q2)); 	
+        }
+        
+        userQueue = qq.dequeue();
+        
+        //recursive version
+        //divide into two queues
+/*        CatenableQueue<User> q1 = new CatenableQueue<User>();
+        CatenableQueue<User> q2 = new CatenableQueue<User>();
+        for(int i = 0; userQueue.size() > 0; i += 1){
+        	if(i%2 == 0){
+        		q1.enqueue(userQueue.dequeue());
+        	} else {
+        		q2.enqueue(userQueue.dequeue());
+        	}
+        }
+        	
+        q1.mergeSort(sortFeature);
+        q2.mergeSort(sortFeature);              
+        userQueue = mergeTwoQueues(sortFeature, q1, q2);*/  
     }
 
     /**
