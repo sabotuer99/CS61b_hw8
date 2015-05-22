@@ -2,7 +2,9 @@ package hw8;
 /* UserList.java */
 
 import queue.*;
+
 import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 public class UserList {
@@ -71,9 +73,49 @@ public class UserList {
     **/ 
     public static void partition(String sortFeature, CatenableQueue<User> qUnsorted, int pivot, 
         CatenableQueue<User> qLess, CatenableQueue<User> qEqual, CatenableQueue<User> qGreater){
-        //Replace with solution.
+ 
+    	//null check
+    	if(qUnsorted == null)
+    		return;
+    	
+    	// put user in right partition
+    	while(qUnsorted.size() > 0){
+        	// get value to pivot on
+        	User user = qUnsorted.dequeue();
+        	int comparitor = getPivot(sortFeature, user);
+        	
+    		if( comparitor < pivot){
+    			//qLess = checkInit(qLess);
+    			qLess.enqueue(user);
+    		} else if( comparitor > pivot ){
+    			//qGreater = checkInit(qGreater);
+    			qGreater.enqueue(user);
+    		} else {
+    			//qEqual = checkInit(qEqual);
+    			qEqual.enqueue(user);
+    		}
+    		
+    	}
+
+        	
     }
 
+	private static int getPivot(String sortFeature, User user) {
+		int comparitor = 0;
+    	if(sortFeature.equals("id"))
+    		comparitor = user.getId();
+    	else 
+    		comparitor = user.getPagesPrinted();
+		return comparitor;
+	}
+
+/*    private static CatenableQueue<User> checkInit(CatenableQueue<User> queue){
+    	if(queue == null)
+    		return new CatenableQueue<User>();
+    	else
+    		return queue;
+    }*/
+    
     /**
     *   quickSort() sorts q from smallest to largest according to sortFeature using quicksort.
     *   @param sortFeature is a string that tells us what we are sorting. If we are
@@ -81,8 +123,29 @@ public class UserList {
     *       printed, sortFeatures equals "pages".
     *   @param q is an unsorted CatenableQueue containing User items.
     **/
-    public static void quickSort(String sortFeature, CatenableQueue<User> q){ 
-        //Replace with solution.
+
+	public static void quickSort(String sortFeature, CatenableQueue<User> q){ 
+    	CatenableQueue<User> left = new CatenableQueue<User>(), 
+    			             stuck = new CatenableQueue<User>(), 
+    			             right = new CatenableQueue<User>();
+    	int pivotIndex = (int)(Math.random() * (double)q.size());
+    	User user = q.nth(pivotIndex);
+    	int pivot = getPivot(sortFeature, user);
+    	
+    	partition(sortFeature, q, pivot, left, stuck, right);
+    	
+    	if(left.size() > 0){
+    		quickSort(sortFeature, left);
+    	}
+    	
+    	if(right.size() > 0){
+    		quickSort(sortFeature, right);   		
+    	}
+    	
+    	q.append(left);
+    	q.append(stuck);
+    	q.append(right);
+    	
     }
 
     /**
