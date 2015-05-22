@@ -1,6 +1,7 @@
 package hw8;
 
 import static org.junit.Assert.*;
+import hw8.Stopwatch;
 
 import org.junit.Test;
 
@@ -118,5 +119,56 @@ public class UserListTests {
 
         assertEquals(sorted, list.toString());
     }
+    
+	public static Integer[] initArray(Integer length){
+		Integer[] arr = new Integer[length];
+		for(int i = 0; i < length; i += 1){
+			//Fisher-Yates "inside-out"
+			int target = (int)(Math.random() * (i + 1));
+			arr[i] = arr[target];
+			arr[target] = i;
+		}
+		//System.out.println("Arrays Initiallized!");
+		return arr;
+	}
+	
+    @Test
+    public void timeTrial() {
+    	
+    	System.out.println("Warmup, this doesn't count...");
+    	timetrial(1);
+    	System.out.println("Ready, set.... GO!");
+    	
+    	for (int j = 1; j <= 5; j++) {		
+	        timetrial(j);
+	        timetrial(j);
+    	}
+    }
+
+	private void timetrial(int j) {
+		UserList list1 = new UserList();
+		UserList list2 = new UserList();
+		int uidCount = 1000000 * j;
+		
+		Integer[] uids = initArray(uidCount);
+		
+		for (int i = 0; i < uidCount; i++) {   	
+			list1.add(new User(uids[i], (int)(Math.random() * uidCount) ));
+			list2.add(new User(uids[i], (int)(Math.random() * uidCount) ));
+		}
+		
+
+		Stopwatch qs = new Stopwatch();
+			list1.quickSort("id");
+		long qstime = (long)(qs.elapsedTime() * 1000);
+		
+		System.out.println("Quicksort " + uidCount + ": " + qstime);
+		
+		Stopwatch ms = new Stopwatch();
+			list2.mergeSort("id");
+		long mstime = (long)(ms.elapsedTime() * 1000);  	
+		
+		System.out.println("Mergesort " + uidCount + ": " + mstime + "\n");
+	}
 
 }
