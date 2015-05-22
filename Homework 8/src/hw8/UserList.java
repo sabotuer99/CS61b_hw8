@@ -268,6 +268,8 @@ public class UserList {
     **/
     public void sortByBothFeatures(){
         //Replace with solution. Don't overthink this one!
+    	mergeSort("id");
+    	mergeSort("print");
     }
 
 
